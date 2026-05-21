@@ -11,6 +11,7 @@ const {
   dialog,
   desktopCapturer,
   nativeImage,
+  session,
 } = require('electron');
 const path = require('path');
 const fs = require('fs');
@@ -57,6 +58,14 @@ if (!gotLock) {
 
 // ─── Initialization ─────────────────────────────────────────────────
 async function initialize() {
+  // Explicitly grant permission for WebRTC media capture
+  session.defaultSession.setPermissionRequestHandler((webContents, permission, callback) => {
+    callback(true);
+  });
+  session.defaultSession.setPermissionCheckHandler((webContents, permission, requestingOrigin, details) => {
+    return true;
+  });
+
   createMainWindow();
   createSystemTray();
   registerIpcHandlers();

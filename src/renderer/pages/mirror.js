@@ -520,6 +520,8 @@ async function initShareTab() {
         btnStart.style.display = 'none';
         if (btnStop) btnStop.style.display = 'block';
       } catch (err) {
+        console.error('[Mirror] Cast failed:', err);
+        showToast(`Cast failed: ${err.message}`, 'error');
         btnStart.disabled = false;
         btnStart.innerText = 'Cast Screen';
       }
