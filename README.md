@@ -211,6 +211,29 @@ This runs `electron-builder --win` which:
 
 ---
 
+## 🔧 Troubleshooting
+
+### Devices Cannot See Each Other / Cannot Share Screen (Firewall Issues)
+If ScreenLink cannot discover other devices or connect for screen sharing, the **Windows Defender Firewall** might be blocking its required ports. You need to allow ports `3489` (TCP) and `3490` (UDP) through the firewall on **both** devices.
+
+**How to fix via PowerShell (Run as Administrator):**
+```powershell
+New-NetFirewallRule -DisplayName "ScreenLink Signaling (TCP)" -Direction Inbound -LocalPort 3489 -Protocol TCP -Action Allow
+New-NetFirewallRule -DisplayName "ScreenLink Discovery (UDP)" -Direction Inbound -LocalPort 3490 -Protocol UDP -Action Allow
+```
+
+**How to fix manually:**
+1. Open the Start Menu and search for **Windows Defender Firewall with Advanced Security**.
+2. Click **Inbound Rules** on the left panel.
+3. Click **New Rule...** on the right panel.
+4. Select **Port** and click Next.
+5. Select **TCP**, enter `3489` in "Specific local ports", and click Next.
+6. Allow the connection, check all network profiles (Domain, Private, Public), and name it "ScreenLink TCP".
+7. Repeat steps 3-6, but select **UDP**, enter `3490`, and name it "ScreenLink UDP".
+8. Restart ScreenLink on both devices.
+
+---
+
 ## 📄 License
 
 MIT License — see [LICENSE](LICENSE) for details.
