@@ -271,8 +271,8 @@ function createSignalingServer(port) {
   });
 
   // ── Start listening ──
-  server.listen(port, () => {
-    console.log(`[Signaling] Server listening on port ${port}`);
+  server.listen(port, '0.0.0.0', () => {
+    console.log(`[Signaling] Server listening on 0.0.0.0:${port}`);
   });
 
   return { app, server, io, port };

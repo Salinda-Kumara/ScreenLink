@@ -48,6 +48,10 @@ if (!gotLock) {
     }
   });
 
+  // CRITICAL: Disable mDNS so WebRTC exposes real local IP addresses
+  // Without this, Windows peers often fail to connect via LAN because they cannot resolve .local ICE candidates.
+  app.commandLine.appendSwitch('disable-features', 'WebRtcHideLocalIpsWithMdns');
+
   app.whenReady().then(initialize);
 }
 
