@@ -244,9 +244,9 @@ function registerIpcHandlers() {
   });
 
   // ── Network information ──
-  ipcMain.handle('get-network-info', () => {
+  ipcMain.handle('get-network-info', async () => {
     try {
-      const localIp = getLocalIPv4();
+      const localIp = await getLocalIPv4();
       return {
         ip: localIp,
         hostname: os.hostname(),
@@ -341,7 +341,7 @@ async function startServices() {
     console.log(`[Main] Signaling server started on port ${signalingServer.port}`);
 
     // Gather device info for discovery broadcasts
-    const localIp = getLocalIPv4();
+    const localIp = await getLocalIPv4();
     const deviceInfo = {
       name: os.hostname(),
       platform: os.platform(),
@@ -379,29 +379,39 @@ async function startServices() {
  * Returns the first non-internal IPv4 address, prioritizing physical adapters over virtual ones.
  */
 function getLocalIPv4() {
-  const interfaces = os.networkInterfaces();
-  
-  // Pass 1: Try to find a physical (non-virtual) interface
-  for (const name of Object.keys(interfaces)) {
-    if (isVirtualInterface(name)) continue;
+  return new Promise((resolve) => {
+    const dgram = require('dgram');
+    const socket = dgram.createSocket('udp4');
     
-    for (const iface of interfaces[name]) {
-      if (!iface.internal && iface.family === 'IPv4') {
-        return iface.address;
+    // Connect to a public DNS server (doesn't send any traffic) to force the OS to pick the default routing interface
+    socket.connect(53, '8.8.8.8', () => {
+      const ip = socket.address().address;
+      socket.close();
+      resolve(ip);
+    });
+
+    socket.on('error', () => {
+      socket.close();
+      // Fallback
+      const interfaces = os.networkInterfaces();
+      for (const name of Object.keys(interfaces)) {
+        if (isVirtualInterface(name)) continue;
+        for (const iface of interfaces[name]) {
+          if (!iface.internal && iface.family === 'IPv4') {
+            return resolve(iface.address);
+          }
+        }
       }
-    }
-  }
-  
-  // Pass 2: Fallback to any non-internal IPv4 (including virtual interfaces)
-  for (const name of Object.keys(interfaces)) {
-    for (const iface of interfaces[name]) {
-      if (!iface.internal && iface.family === 'IPv4') {
-        return iface.address;
+      for (const name of Object.keys(interfaces)) {
+        for (const iface of interfaces[name]) {
+          if (!iface.internal && iface.family === 'IPv4') {
+            return resolve(iface.address);
+          }
+        }
       }
-    }
-  }
-  
-  return '127.0.0.1';
+      resolve('127.0.0.1');
+    });
+  });
 }
 
 /**

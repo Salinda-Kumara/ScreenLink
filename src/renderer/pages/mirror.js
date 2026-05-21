@@ -452,12 +452,20 @@ async function initShareTab() {
       if (targetDevice) {
         showToast(`Found ${targetDevice.name}! Connecting...`, 'info');
         const url = `http://${targetDevice.ip}:${targetDevice.serverPort}`;
-        const connected = await socketService.connectToRemote(url, code);
-        if (connected) {
-          showToast('Connected successfully!', 'success');
-          // Re-initialize tab
-          await switchTab('share');
-        } else {
+        
+        try {
+          const connected = await socketService.connectToRemote(url, code);
+          if (connected) {
+            showToast('Connected successfully!', 'success');
+            // Re-initialize tab
+            await switchTab('share');
+          } else {
+            btnConnect.disabled = false;
+            btnConnect.innerText = 'Connect';
+          }
+        } catch (err) {
+          console.error('[Mirror] Connection failed:', err);
+          showToast(`Connection failed: ${err.message}`, 'error');
           btnConnect.disabled = false;
           btnConnect.innerText = 'Connect';
         }
