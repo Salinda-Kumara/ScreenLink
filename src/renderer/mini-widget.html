@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ScreenLink Controls</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+    body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: transparent;
+      font-family: 'Inter', -apple-system, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .widget-container {
+      width: 152px;
+      height: 40px;
+      background: rgba(18, 18, 26, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      padding: 0 6px 0 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(145, 90, 255, 0.15);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .widget-container:hover {
+      border-color: rgba(145, 90, 255, 0.3);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 20px rgba(145, 90, 255, 0.25);
+    }
+    .drag-handle {
+      -webkit-app-region: drag;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: grab;
+      color: rgba(255, 255, 255, 0.35);
+      margin-right: 6px;
+    }
+    .drag-handle:active {
+      cursor: grabbing;
+    }
+    .drag-handle svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+    .action-buttons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255, 255, 255, 0.05);
+      color: rgba(255, 255, 255, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      outline: none;
+      -webkit-app-region: no-drag;
+    }
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      transform: scale(1.08);
+    }
+    .btn:active {
+      transform: scale(0.95);
+    }
+    .btn-pause.paused {
+      background: rgba(145, 90, 255, 0.25);
+      color: #915AFF;
+      border: 1px solid rgba(145, 90, 255, 0.4);
+      box-shadow: 0 0 8px rgba(145, 90, 255, 0.3);
+    }
+    .btn-pause.paused:hover {
+      background: rgba(145, 90, 255, 0.35);
+      color: #a06fff;
+    }
+    .btn-stop {
+      background: rgba(248, 113, 113, 0.15);
+      color: #f87171;
+    }
+    .btn-stop:hover {
+      background: rgba(248, 113, 113, 0.3);
+      color: #ff8a8a;
+      box-shadow: 0 0 8px rgba(248, 113, 113, 0.35);
+    }
+    .btn svg {
+      width: 12px;
+      height: 12px;
+      fill: currentColor;
+    }
+    .indicator-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #34d399;
+      margin-left: 8px;
+      margin-right: 6px;
+      box-shadow: 0 0 6px #34d399;
+      animation: pulse 2s ease-in-out infinite;
+      -webkit-app-region: no-drag;
+    }
+    .indicator-dot.paused {
+      background: #fbbf24;
+      box-shadow: 0 0 6px #fbbf24;
+    }
+    @keyframes pulse {
+      0% { opacity: 0.6; }
+      50% { opacity: 1; }
+      100% { opacity: 0.6; }
+    }
+  </style>
+</head>
+<body>
+  <div class="widget-container">
+    <!-- Drag Handle -->
+    <div class="drag-handle" title="Drag Control Overlay">
+      <svg viewBox="0 0 24 24">
+        <circle cx="9" cy="5" r="2"/>
+        <circle cx="9" cy="12" r="2"/>
+        <circle cx="9" cy="19" r="2"/>
+        <circle cx="15" cy="5" r="2"/>
+        <circle cx="15" cy="12" r="2"/>
+        <circle cx="15" cy="19" r="2"/>
+      </svg>
+    </div>
+
+    <!-- Buttons -->
+    <div class="action-buttons">
+      <!-- Pause / Resume -->
+      <button id="btn-pause" class="btn btn-pause" title="Pause Mirroring">
+        <svg id="svg-pause-icon" viewBox="0 0 24 24" style="display: block;">
+          <rect x="6" y="4" width="4" height="16" rx="1"/>
+          <rect x="14" y="4" width="4" height="16" rx="1"/>
+        </svg>
+        <svg id="svg-play-icon" viewBox="0 0 24 24" style="display: none;">
+          <path d="M8 5v14l11-7z"/>
+        </svg>
+      </button>
+
+      <!-- Stop -->
+      <button id="btn-stop" class="btn btn-stop" title="Stop Casting">
+        <svg viewBox="0 0 24 24">
+          <rect x="4" y="4" width="16" height="16" rx="2"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Status dot -->
+    <div id="status-dot" class="indicator-dot"></div>
+  </div>
+
+  <script>
+    const btnPause = document.getElementById('btn-pause');
+    const btnStop = document.getElementById('btn-stop');
+    const statusDot = document.getElementById('status-dot');
+    const pauseIcon = document.getElementById('svg-pause-icon');
+    const playIcon = document.getElementById('svg-play-icon');
+
+    let currentIsPaused = false;
+
+    // Listen to state changes from main process
+    if (window.mirrorcast && window.mirrorcast.onMiniWidgetStateUpdate) {
+      window.mirrorcast.onMiniWidgetStateUpdate((state) => {
+        console.log('[Widget] State updated from parent:', state);
+        if (state && typeof state.isPaused === 'boolean') {
+          updateUI(state.isPaused);
+        }
+      });
+    }
+
+    function updateUI(isPaused) {
+      currentIsPaused = isPaused;
+      if (isPaused) {
+        btnPause.classList.add('paused');
+        btnPause.title = 'Resume Mirroring';
+        pauseIcon.style.display = 'none';
+        playIcon.style.display = 'block';
+        statusDot.classList.add('paused');
+      } else {
+        btnPause.classList.remove('paused');
+        btnPause.title = 'Pause Mirroring';
+        pauseIcon.style.display = 'block';
+        playIcon.style.display = 'none';
+        statusDot.classList.remove('paused');
+      }
+    }
+
+    // Event Binds
+    btnPause.addEventListener('click', () => {
+      if (window.mirrorcast && window.mirrorcast.sendMiniWidgetAction) {
+        // Optimistically update
+        updateUI(!currentIsPaused);
+        window.mirrorcast.sendMiniWidgetAction('pause');
+      }
+    });
+
+    btnStop.addEventListener('click', () => {
+      if (window.mirrorcast && window.mirrorcast.sendMiniWidgetAction) {
+        window.mirrorcast.sendMiniWidgetAction('stop');
+      }
+    });
+  </script>
+</body>
+</html>

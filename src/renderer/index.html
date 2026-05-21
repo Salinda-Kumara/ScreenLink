@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval'; connect-src 'self' ws: wss: http: https:; media-src 'self' blob: mediastream:; img-src 'self' data: blob:; font-src 'self' https://fonts.gstatic.com;">
+  <title>ScreenLink</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles/index.css">
+  <link rel="stylesheet" href="./styles/animations.css">
+</head>
+<body>
+  <!-- Custom Title Bar -->
+  <div id="titlebar">
+    <div class="titlebar-drag">
+      <div class="titlebar-logo">
+        <svg width="20" height="20" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Back screen -->
+          <rect x="14" y="8" width="34" height="24" rx="3" stroke="url(#logoGrad)" stroke-width="2.5" fill="none" opacity="0.5"/>
+          <rect x="20" y="32" width="22" height="2" rx="1" fill="url(#logoGrad)" opacity="0.5"/>
+          <!-- Front screen -->
+          <rect x="22" y="18" width="34" height="24" rx="3" stroke="url(#logoGrad)" stroke-width="2.5" fill="none"/>
+          <rect x="28" y="42" width="22" height="2" rx="1" fill="url(#logoGrad)"/>
+          <!-- Wireless signal arcs -->
+          <path d="M39 10 C39 10, 44 4, 50 4" stroke="url(#logoGrad)" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.4"/>
+          <path d="M39 10 C39 10, 46 0, 55 0" stroke="url(#logoGrad)" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.25"/>
+          <path d="M39 10 C39 10, 42 7, 45 7.5" stroke="url(#logoGrad)" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.6"/>
+          <!-- Signal dot -->
+          <circle cx="39" cy="11" r="2" fill="url(#logoGrad)"/>
+          <defs>
+            <linearGradient id="logoGrad" x1="0" y1="0" x2="64" y2="64">
+              <stop offset="0%" stop-color="#915AFF"/>
+              <stop offset="100%" stop-color="#3FB9FF"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <span>ScreenLink</span>
+      </div>
+    </div>
+    <div class="titlebar-controls">
+      <button id="btn-minimize" class="titlebar-btn" aria-label="Minimize">&#x2014;</button>
+      <button id="btn-maximize" class="titlebar-btn" aria-label="Maximize">&#x25A1;</button>
+      <button id="btn-close" class="titlebar-btn titlebar-btn-close" aria-label="Close">&#x2715;</button>
+    </div>
+  </div>
+
+  <!-- App Layout -->
+  <div id="app-container">
+    <nav id="sidebar"></nav>
+    <main id="content"></main>
+  </div>
+
+  <!-- Toast Notifications -->
+  <div id="toast-container"></div>
+
+  <!-- Modal Container -->
+  <div id="modal-container"></div>
+
+  <!-- Socket.io Client -->
+  <script src="../../node_modules/socket.io-client/dist/socket.io.min.js"></script>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

@@ -1,0 +1,414 @@
+/* ============================================================
+   ScreenLink — Micro-Animation System
+   ============================================================ */
+
+/* ---------- Keyframes ---------- */
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes pulseRing {
+  0% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes ripple {
+  from {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(145, 90, 255, 0.1),
+                0 0 20px rgba(145, 90, 255, 0.05);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(145, 90, 255, 0.25),
+                0 0 40px rgba(145, 90, 255, 0.15);
+  }
+}
+
+@keyframes typewriter {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes dotPulse {
+  0%, 20% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes particleFloat {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  30% {
+    transform: translate(15px, -30px) rotate(45deg);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translate(-10px, -60px) rotate(120deg);
+    opacity: 0.5;
+  }
+  70% {
+    transform: translate(20px, -90px) rotate(200deg);
+    opacity: 0.3;
+  }
+  90% {
+    opacity: 0.1;
+  }
+  100% {
+    transform: translate(-5px, -120px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes borderGlow {
+  0%, 100% {
+    border-color: rgba(145, 90, 255, 0.15);
+  }
+  50% {
+    border-color: rgba(145, 90, 255, 0.4);
+  }
+}
+
+@keyframes breathe {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.02);
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  20% { transform: rotate(-3deg); }
+  40% { transform: rotate(3deg); }
+  60% { transform: rotate(-2deg); }
+  80% { transform: rotate(2deg); }
+}
+
+@keyframes dash {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes countDown {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+
+/* ---------- Utility Animation Classes ---------- */
+
+.fade-in {
+  animation: fadeIn 300ms ease forwards;
+}
+
+.fade-in-up {
+  animation: fadeInUp 400ms ease forwards;
+}
+
+.fade-in-down {
+  animation: fadeInDown 400ms ease forwards;
+}
+
+.slide-in-left {
+  animation: slideInLeft 300ms ease forwards;
+}
+
+.slide-in-right {
+  animation: slideInRight 300ms ease forwards;
+}
+
+.scale-in {
+  animation: scaleIn 300ms ease forwards;
+}
+
+.pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+.shimmer {
+  animation: shimmer 1.5s ease-in-out infinite;
+  background-size: 200% 100%;
+}
+
+.glow-pulse {
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+.bounce-in {
+  animation: bounceIn 500ms ease forwards;
+}
+
+.wiggle {
+  animation: wiggle 600ms ease forwards;
+}
+
+.breathe {
+  animation: breathe 3s ease-in-out infinite;
+}
+
+.gradient-shift {
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease infinite;
+}
+
+.typewriter {
+  overflow: hidden;
+  white-space: nowrap;
+  animation: typewriter 2s steps(40) forwards;
+}
+
+/* Loading dots */
+.dot-pulse {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.dot-pulse span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-secondary);
+  animation: dotPulse 1.4s ease-in-out infinite;
+}
+
+.dot-pulse span:nth-child(1) { animation-delay: 0s; }
+.dot-pulse span:nth-child(2) { animation-delay: 0.2s; }
+.dot-pulse span:nth-child(3) { animation-delay: 0.4s; }
+
+
+/* ---------- Staggered Animation Delays ---------- */
+
+.delay-1 { animation-delay: 100ms; }
+.delay-2 { animation-delay: 200ms; }
+.delay-3 { animation-delay: 300ms; }
+.delay-4 { animation-delay: 400ms; }
+.delay-5 { animation-delay: 500ms; }
+.delay-6 { animation-delay: 600ms; }
+.delay-7 { animation-delay: 700ms; }
+.delay-8 { animation-delay: 800ms; }
+
+/* Stagger children (apply to parent) */
+.stagger-children > :nth-child(1) { animation-delay: 50ms; }
+.stagger-children > :nth-child(2) { animation-delay: 100ms; }
+.stagger-children > :nth-child(3) { animation-delay: 150ms; }
+.stagger-children > :nth-child(4) { animation-delay: 200ms; }
+.stagger-children > :nth-child(5) { animation-delay: 250ms; }
+.stagger-children > :nth-child(6) { animation-delay: 300ms; }
+.stagger-children > :nth-child(7) { animation-delay: 350ms; }
+.stagger-children > :nth-child(8) { animation-delay: 400ms; }
+.stagger-children > :nth-child(9) { animation-delay: 450ms; }
+.stagger-children > :nth-child(10) { animation-delay: 500ms; }
+
+
+/* ---------- Reduced Motion Respect ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+
+/* ---------- Ripple Effect (click) ---------- */
+
+.ripple-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple-effect {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  animation: ripple 600ms ease-out forwards;
+  pointer-events: none;
+}
+
+
+/* ---------- Particle Background ---------- */
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(145, 90, 255, 0.3);
+  animation: particleFloat 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.particle:nth-child(odd) {
+  background: rgba(63, 185, 255, 0.2);
+  animation-duration: 8s;
+}
+
+.particle:nth-child(3n) {
+  width: 3px;
+  height: 3px;
+  animation-duration: 7s;
+  animation-delay: 1s;
+}
+
+.particle:nth-child(5n) {
+  width: 2px;
+  height: 2px;
+  animation-duration: 9s;
+  animation-delay: 2s;
+}
